@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide Show</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <script src="./js/image_data.js"></script>
+  <script src="./js/main.js" defer></script>
+</head>
+<body>
+  <main id="main-content">
+    <div class="container">
+      <div class="slide hidden">
+        <div class="viewport">
+          <div class="item-wrap">
+            <!-- slide items will append into this area later -->
+          </div>
+        </div>
+        <div class="btn-wrap left">
+          <button type="button" class="btn btn-prev">&lt;</button>
+        </div>
+        <div class="btn-wrap right">
+          <button type="button" class="btn btn-next">&gt;</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- preloader -->
+  <div class="modal">
+    <div class="preloader">
+      <div class="loading-message">Loading...</div>
+      <div class="progress">
+        <div class="value">0%</div>
+        <div class="bar"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

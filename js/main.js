@@ -39,15 +39,7 @@ btnNext.onclick = () => {
   nextSlide();
 };
 
-slide.onmouseenter = () => {
-  slideControl.forEach((el) => {
-    el.classList.add('show');
-  });
-};
 slide.onmouseleave = () => {
-  slideControl.forEach((el) => {
-    el.classList.remove('show');
-  });
   if (!autoSlide)
     autoSlide = setInterval(nextSlide, slideInterval);
 };

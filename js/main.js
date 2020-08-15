@@ -1,7 +1,7 @@
 'use strict';
 const slide = document.querySelector('.slide');
-const slideVW = document.querySelector('.slide .viewport').offsetWidth;
-const slideItemWrap = document.querySelector('.slide .item-wrap');
+const slideViewport = document.querySelector('.slide .viewport');
+const slideVW = slideViewport.offsetWidth;
 const slideControl = document.querySelectorAll('.slide .btn-wrap');
 const btnPrev = document.querySelector('.btn-prev');
 const btnNext = document.querySelector('.btn-next');
@@ -9,6 +9,7 @@ const progressBar = document.querySelector('.progress .bar');
 const progressValue = document.querySelector('.progress .value');
 
 var
+  slideItems = [],
   itemCount = imageData.length, // biến imageData được lấy từ file image_data.js
   itemIndex = 0,
   autoSlide = null,
@@ -16,16 +17,51 @@ var
 
 function prevSlide() {
   itemIndex--;
+  if (itemIndex < 0) {
+    slideItems[0].addEventListener('animationend', function () {
+      this.classList.remove('active', 'right');
+    });
+    slideItems[0].classList.add('right');
+    slideItems[itemCount - 1].addEventListener('animationend', function () {
+      this.classList.add('active');
+      this.classList.remove('prev', 'right');
+    });
+    slideItems[itemCount - 1].classList.add('prev', 'right');
+  } else {
+    slideItems[itemIndex + 1].addEventListener('animationend', function () {
+      this.classList.remove('active', 'right');
+    });
+    slideItems[itemIndex + 1].classList.add('right');
+    slideItems[itemIndex].classList.add('prev', 'right');
+    slideItems[itemIndex].addEventListener('animationend', function () {
+      this.classList.add('active');
+      this.classList.remove('prev', 'right');
+    });
+  }
   if (itemIndex < 0)
     itemIndex = itemCount - 1;
-  slideItemWrap.style.marginLeft = `${-itemIndex * slideVW}px`;
 }
 
 function nextSlide() {
   itemIndex++;
   if (itemIndex > itemCount - 1)
     itemIndex = 0;
-  slideItemWrap.style.marginLeft = `${-itemIndex * slideVW}px`;
+  if (itemIndex === 0) {
+    slideItems[itemCount - 1].addEventListener('animationend', function () {
+      this.classList.remove('active', 'left');
+    });
+    slideItems[itemCount - 1].classList.add('left');
+  } else {
+    slideItems[itemIndex - 1].addEventListener('animationend', function () {
+      this.classList.remove('active', 'left');
+    });
+    slideItems[itemIndex - 1].classList.add('left');
+  }
+  slideItems[itemIndex].classList.add('next', 'left');
+  slideItems[itemIndex].addEventListener('animationend', function() {
+    this.classList.add('active');
+    this.classList.remove('next', 'left');
+  });
 }
 
 btnPrev.onclick = () => {
@@ -51,27 +87,27 @@ slide.onmouseleave = () => {
 
 function appendItem(urls) {
   let loaded = 0;
-  const pendingItem = [];
   return new Promise((resolve) => {
     urls.forEach((url) => {
       let item = document.createElement('div');
       let img = document.createElement('img');
       item.classList.add('item');
+      item.appendChild(img);
+      slideItems.push(item);
       img.onload = () => {
         loaded++;
         let percent = Math.floor(loaded / itemCount * 100);
         progressValue.innerHTML =
         progressBar.style.width = `${percent}%`;
         if (loaded === itemCount) {
-          pendingItem.forEach((item) => {
-            slideItemWrap.appendChild(item);
+          slideItems.forEach((item) => {
+            slideViewport.appendChild(item);
           });
+          slideItems[0].classList.add('active');
           resolve();
         };
       };
       img.src = `./img/${url}`;
-      item.appendChild(img);
-      pendingItem.push(item);
     });
   });
 }

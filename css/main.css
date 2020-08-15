@@ -27,6 +27,7 @@ table{border-collapse:collapse;border-spacing:0}
 }
 
 .slide .viewport {
+  position: relative;
   overflow: hidden;
   margin: 0 auto;
   width: 900px;
@@ -34,17 +35,9 @@ table{border-collapse:collapse;border-spacing:0}
   font-size: 0;
 }
 
-.slide .item-wrap {
-  display: inline-block;
-  white-space: nowrap;
-  height: 100%;
-  -webkit-transition: margin 1s cubic-bezier(0.69, 0.32, 0.33, 1.01);
-  -o-transition: margin 1s cubic-bezier(0.69, 0.32, 0.33, 1.01);
-  transition: margin 1s cubic-bezier(0.69, 0.32, 0.33, 1.01);
-}
-
 .slide .item {
-  display: inline-block;
+  display: none;
+  position: absolute;
   width: 900px;
   height: 100%;
 }
@@ -54,6 +47,45 @@ table{border-collapse:collapse;border-spacing:0}
   height: 100%;
   -o-object-fit: cover;
   object-fit: cover;
+}
+
+.slide .item.active {
+  display: block;
+  left: 0;
+}
+
+.slide .item.next {
+  display: block;
+  left: 100%;
+}
+
+.slide .item.prev {
+  display: block;
+  left: -100%;
+}
+
+.slide .item.left {
+  animation-name: left;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.69, 0.32, 0.33, 1.01);
+  animation-fill-mode: forwards;
+}
+
+@keyframes left {
+  from {transform: translateX(0);}
+  to {transform: translateX(-900px);}
+}
+
+.slide .item.right {
+  animation-name: right;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.69, 0.32, 0.33, 1.01);
+  animation-fill-mode: forwards;
+}
+
+@keyframes right {
+  from {transform: translateX(0);}
+  to {transform: translateX(900px);}
 }
 
 .slide .btn {
